@@ -23,21 +23,23 @@
 						<div class="bunked">
 							<img src="{% static "arrow.png" %}"/>
 							<h2> BUNKED </h2>
+							<p>At: {{ bunk.time }}</p>
 						</div>
 						<div class="user">
-							<img src="{% static bunk.to_user.photo %}"/>
+							<a href="/bunks/{{ bunk.to_user.user }}"><img src="{% static bunk.to_user.photo %}"/></a>
 							<h2>{{ bunk.to_user.user }}</h2>
 						</div>
 					</li>
 				{% else %}
 					<li>
 						<div class="user">
-							<img src="{% static bunk.from_user.photo %}"/>
+							<a href="/bunks/{{ bunk.from_user.user }}"><img src="{% static bunk.from_user.photo %}"/></a>
 							<h2>{{ bunk.from_user.user }}</h2>
 						</div>
 						<div class="bunked">
 							<img src="{% static "arrow.png" %}"/>
 							<h2> BUNKED </h2>
+							<p>At: {{ bunk.time }}</p>
 						</div>
 						<div class="user-you">
 							<h2>YOU</h2>

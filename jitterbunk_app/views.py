@@ -1,10 +1,10 @@
 from jitterbunk_app.models import Bunk, User
 from django.shortcuts import render_to_response, get_object_or_404
-from django.utils import timezone
 from forms import BunkSomeone
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
+from django.db.models import Q
 
 
 def main_feed(request):
@@ -15,14 +15,11 @@ def main_feed(request):
 
 def personal_feed(request, user_name):
     """ Displays bunks either from you or to you """
-    bunk_list = Bunk.objects.all().order_by('-time')
-    your_bunks = []
-    for bunk in bunk_list:
-        if bunk.from_user.user == user_name or bunk.to_user.user == user_name:
-            your_bunks.append(bunk)
+    user = User.objects.get(user=user_name)
+    bunk_list = Bunk.objects.filter(Q(from_user=user) | Q(to_user=user))
     form = BunkSomeone()
     return render_to_response('personal_feed.html', {
-        'bunk_list': your_bunks,
+        'bunk_list': bunk_list,
         'user': user_name,
         'form': form
     })
@@ -37,8 +34,7 @@ def bunked(request):
             user_bunked = get_object_or_404(User, user=to_user_name)
             user_bunking = get_object_or_404(User, user=from_user_name)
             new_bunk = Bunk(from_user=user_bunking,
-                            to_user=user_bunked,
-                            time=timezone.now())
+                            to_user=user_bunked)
             new_bunk.save()
             return redirect('jitterbunk_app.views.personal_feed',
                             user_name=from_user_name)

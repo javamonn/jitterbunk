@@ -23,11 +23,11 @@ class Bunk(models.Model):
     to_user: user that got bunked
     time: time of the bunk
     """
-    from_user = models.OneToOneField(User,
-                                     related_name='bunk_from_user')
-    to_user = models.OneToOneField(User,
-                                   related_name="bunk_to_user")
-    time = models.DateTimeField("Time of Bunk")
+    from_user = models.ForeignKey(User,
+                                  related_name='from_user')
+    to_user = models.ForeignKey(User,
+                                related_name='to_user')
+    time = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return "from " + str(self.from_user) + ", to " + str(self.to_user)
