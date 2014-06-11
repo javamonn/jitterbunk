@@ -1,0 +1,52 @@
+{% load staticfiles %}
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static "feed.css" %}" />
+	<title>{{ user }}'s feed</title>
+</head>
+
+<body>
+	<h1> {{ user }}'s Bunk Feed </h1>
+	<form action="/bunked/" method="POST">
+		{{ form.as_p }}
+		<input type="submit" value="Bunk!" />
+		<input type="hidden" value="{{ user }}" name="from_user"/>
+	</form>
+	</div>
+	{% if bunk_list %}
+		<ul>
+			{% for bunk in bunk_list %}
+				{% if bunk.from_user.user == user %}
+					<li>
+						<div class="user-you">
+							<h2>YOU</h2>
+						</div>
+						<div class="bunked">
+							<img src="{% static "arrow.png" %}"/>
+							<h2> BUNKED </h2>
+						</div>
+						<div class="user">
+							<img src="{% static bunk.to_user.photo %}"/>
+							<h2>{{ bunk.to_user.user }}</h2>
+						</div>
+					</li>
+				{% else %}
+					<li>
+						<div class="user">
+							<img src="{% static bunk.from_user.photo %}"/>
+							<h2>{{ bunk.from_user.user }}</h2>
+						</div>
+						<div class="bunked">
+							<img src="{% static "arrow.png" %}"/>
+							<h2> BUNKED </h2>
+						</div>
+						<div class="user-you">
+							<h2>YOU</h2>
+						</div>
+					</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>No Bunks available</p>
+	{% endif %}
+</body>
